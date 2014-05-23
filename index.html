@@ -1,0 +1,115 @@
+<html>
+	<head>
+		<title>Lemon_Life_Game</title>
+		<style>canvas { width: 100%; height: 100% }</style>
+	</head>
+	<body>
+		<script src="js/three.min.js"></script>
+		<script src="js/OrbitControls.js"></script>
+		<script>
+		//later I will add collision detection
+		//var collidableMeshList = [];
+		////////
+		
+		
+		var scene = new THREE.Scene();
+		var camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+
+		var renderer = new THREE.WebGLRenderer();
+		renderer.setSize(window.innerWidth, window.innerHeight);
+		document.body.appendChild(renderer.domElement);
+
+			
+
+		camera.position.set(0,150,400);
+		camera.lookAt(scene.position);
+
+
+
+    ///////////////   set up our orbit controls////
+    controls = new THREE.OrbitControls(camera, renderer.domElement);
+    /////////////////	/////////////////////////////////////		
+			
+	///////////////////////		//setup our walls  	////////////
+	////Later I'm thinking of adding blender models//////
+		var wallGeometry = new THREE.CubeGeometry( 100, 100, 20, 1, 1, 1 );
+		var wallMaterial = new THREE.MeshBasicMaterial( {color: 0xfffffff} );
+		var wallMaterial2 = new THREE.MeshBasicMaterial( {color: 0xFF0000} );
+		
+		var wireMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, wireframe:true } );
+	
+		var wall = new THREE.Mesh(wallGeometry, wallMaterial);
+		wall.position.set(100, 50, -100);
+		scene.add(wall);
+		//collidableMeshList.push(wall);
+		var wall = new THREE.Mesh(wallGeometry, wireMaterial);
+		//xyz
+		wall.position.set(100, 50, -100);
+		scene.add(wall);
+	
+		var wall2 = new THREE.Mesh(wallGeometry, wallMaterial);
+		wall2.position.set(-150, 50, 0);
+		wall2.rotation.y = 3.14159 / 2;
+		scene.add(wall2);
+		//collidableMeshList.push(wall2);
+		var wall2 = new THREE.Mesh(wallGeometry, wireMaterial);
+		wall2.position.set(-150, 50, 0);
+		wall2.rotation.y = 3.14159 / 2;
+		scene.add(wall2);
+		
+		var wall3 = new THREE.Mesh(wallGeometry, wallMaterial2);
+		wall3.position.set(-10, 90, 0);
+		wall3.rotation.y = 3.14159 / 2;
+		scene.add(wall3);
+		//collidableMeshList.push(wall2);
+		var wall3 = new THREE.Mesh(wallGeometry, wireMaterial);
+		wall3.position.set(-10, 90, 0);
+		wall3.rotation.y = 3.14159 / 2;
+		scene.add(wall3);
+//////////////////////////////////////////////////////////
+
+
+////////////////////////////////three point light system
+      	//add light with a color to give object or scene some rhythm
+      	//can be rgb value also example: var light = new THREE.PointLight("rgb(255,0,0)");
+      	var light = new THREE.PointLight(0xffffff);
+      	//set position of light
+      	light.position.set(-100,200,100);
+      	//add to scene
+      	scene.add(light);
+      	//add ambient lighting	
+      	var ambientlight = new THREE.AmbientLight( 0x040404 );
+      	ambientlight.position.set(-200,300,130);
+		scene.add(ambientlight);
+		
+		//add another light later
+		
+		/////////////////////	////////////////////////////
+		
+			var render = function () {
+				requestAnimationFrame(render);
+
+				
+
+				renderer.render(scene, camera);
+			};
+			/////add lemon object////
+			var jsonLoader = new THREE.JSONLoader();
+		jsonLoader.load( "assets/lemonone.js", lemonEnemy );
+			
+		//////////	///////////////////////
+			
+			function lemonEnemy( geometry, materials ) 
+			{
+				//add material to our json Model
+				var material = new THREE.MeshFaceMaterial( materials );
+				lemonMoving = new THREE.Mesh( geometry, material );
+				lemonMoving.scale.set(10,10,10);
+				scene.add( lemonMoving );
+			}
+
+
+			render();
+		</script>
+	</body>
+</html>
